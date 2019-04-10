@@ -2,11 +2,8 @@ package edu.somaiya.attendifi;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
@@ -36,22 +33,18 @@ public class MainActivity extends AppCompatActivity {
 
         txtView = (TextView) findViewById(R.id.txtContent);
 
-//        String text="this is my IP";
-//        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-//        try {
-//            BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE,200,200);
-//            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-//            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-//            imageView.setImageBitmap(bitmap);
-//        } catch (WriterException e) {
-//            e.printStackTrace();
-//        }
+        final ImageView myImageView = (ImageView) findViewById(R.id.imgview);
 
-        ImageView myImageView = (ImageView) findViewById(R.id.imgview);
-        myBitmap = BitmapFactory.decodeResource(
-                getApplicationContext().getResources(),
-                R.drawable.puppy);
-        myImageView.setImageBitmap(myBitmap);
+        String text="this is my IP and this is some test string to generate a populated bitmap";
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+        try {
+            BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE,1000,1000);
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            myBitmap = barcodeEncoder.createBitmap(bitMatrix);
+            myImageView.setImageBitmap( myBitmap );
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
 
         Button btn = (Button) findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     txtView.setText(R.string.scanner_fail);
                     return;
                 }
+                myBitmap = ((BitmapDrawable)myImageView.getDrawable()).getBitmap();
                 frame = new Frame.Builder().setBitmap(myBitmap).build();
                 barcodes = detector.detect(frame);
                 thisCode = barcodes.valueAt(0);
