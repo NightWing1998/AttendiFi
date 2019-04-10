@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AttendiFi</string>
+    <string name="buttonProcess">Process</string>
 </resources>

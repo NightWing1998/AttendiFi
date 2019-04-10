@@ -29,4 +29,4 @@
 			...
 	```
 * Install Google Play services
-	<img src = "./app/src/main/res/drawable/playInstall.gif">
+	<img src = "./app/src/main/res/drawable/play_install.gif">
