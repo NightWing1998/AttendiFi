@@ -32,7 +32,7 @@
 	<img src = "./app/src/main/res/drawable/play_install.gif">
 
 * Scanning done!!
-	< Please refer to the the commit with the same message to view the changes >
+	<p>Please refer to the the commit with the same message to view the changes</p>
 
 * Modify build.gradle again to use Zxing library
 	```java
