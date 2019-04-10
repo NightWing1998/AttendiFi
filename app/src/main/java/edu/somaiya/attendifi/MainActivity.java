@@ -15,6 +15,11 @@ import android.widget.TextView;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +36,17 @@ public class MainActivity extends AppCompatActivity {
 
         txtView = (TextView) findViewById(R.id.txtContent);
 
+//        String text="this is my IP";
+//        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+//        try {
+//            BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE,200,200);
+//            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+//            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+//            imageView.setImageBitmap(bitmap);
+//        } catch (WriterException e) {
+//            e.printStackTrace();
+//        }
+
         ImageView myImageView = (ImageView) findViewById(R.id.imgview);
         myBitmap = BitmapFactory.decodeResource(
                 getApplicationContext().getResources(),
@@ -46,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                                 .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE)
                                 .build();
                 if(!detector.isOperational()){
-                    txtView.setText("Could not set up the detector!");
+                    txtView.setText(R.string.scanner_fail);
                     return;
                 }
                 frame = new Frame.Builder().setBitmap(myBitmap).build();

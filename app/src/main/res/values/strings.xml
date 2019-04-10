@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">AttendiFi</string>
     <string name="buttonProcess">Process</string>
+    <string name="scanner_fail">"Could not set up the detector!"</string>
 </resources>

@@ -30,3 +30,16 @@
 	```
 * Install Google Play services
 	<img src = "./app/src/main/res/drawable/play_install.gif">
+
+* Scanning done!!
+	< Please refer to the the commit with the same message to view the changes >
+
+* Modify build.gradle again to use Zxing library
+	```java
+		dependencies{
+			...
+			implementation 'com.google.zxing:core:3.2.1'
+			implementation 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
+			...
+		}
+	```
