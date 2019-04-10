@@ -28,3 +28,5 @@
 			}
 			...
 	```
+* Install Google Play services
+	<img src = "./app/src/main/res/drawable/playInstall.gif">
