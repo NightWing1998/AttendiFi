@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     Barcode thisCode;
     BarcodeDetector detector;
     Bitmap myBitmap;
-    String all = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMONPQRSTUVWXYZ0123456789`~!@#$%^&*(){}[]:';\",./<>?";
+    String all = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMONPQRSTUVWXYZ0123456789`~!@$%^&*(){}[]:';\",./<>?";
     public String random(int len){
         String res = "";
         for(int i = 0;i < len;i++){
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ImageView myImageView = (ImageView) findViewById(R.id.imgview);
 
-        String text= random(20) + "#192.168.0.1#" + random(15);
+        String text= random(64) + "#192A168B0C1D#" + random(64);     //encoding 192.168.0.1 IP in the string
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
             BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE,1000,1000);
