@@ -26,6 +26,14 @@ public class MainActivity extends AppCompatActivity {
     Barcode thisCode;
     BarcodeDetector detector;
     Bitmap myBitmap;
+    String all = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMONPQRSTUVWXYZ0123456789`~!@#$%^&*(){}[]:';\",./<>?";
+    public String random(int len){
+        String res = "";
+        for(int i = 0;i < len;i++){
+            res += all.charAt( (int) (Math.random()*all.length()) );
+        }
+        return res;
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ImageView myImageView = (ImageView) findViewById(R.id.imgview);
 
-        String text="this is my IP and this is some test string to generate a populated bitmap";
+        String text= random(20) + "#192.168.0.1#" + random(15);
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
             BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE,1000,1000);

@@ -43,3 +43,6 @@
 			...
 		}
 	```
+
+* Initial scan and process:
+	<img src = "./app/src/main/res/drawable/image_scanning.gif">
