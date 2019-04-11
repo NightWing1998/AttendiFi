@@ -43,6 +43,8 @@
 			...
 		}
 	```
-
+* QR Code Generation done!!
+	<p>Please refer to the commit with the same message to view the changes</p>
+	
 * Initial scan and process:
 	<img src = "./app/src/main/res/drawable/image_scanning.gif">
