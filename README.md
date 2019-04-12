@@ -1,6 +1,5 @@
 # AttendiFi
 
-------------------------------------------
 ### Initial set up
 * Change the build.gradle(Module : app) file with the following code:
 	```java
@@ -48,3 +47,58 @@
 	
 * Initial scan and process:
 	<img src = "./app/src/main/res/drawable/image_scanning.gif">
+
+* Get the IP Address of the device:
+	```java
+		public String getLocalIpAddress(){
+			try {
+				for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
+					en.hasMoreElements();) {
+					NetworkInterface intf = en.nextElement();
+					for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+						InetAddress inetAddress = enumIpAddr.nextElement();
+						if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
+							return inetAddress.getHostAddress();
+						}
+					}
+				}
+			} catch (Exception ex) {
+				Log.i("IP Address", ex.toString());
+			}
+			return null;
+		};
+	```
+* Encode the IP Address around random text and mark it with hash for easy decomposition
+	```java
+		...
+		String all = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMONPQRSTUVWXYZ0123456789`~!@$%^&*(){}[]:';\",./<>?";
+		public String random(int len){
+			String res = "";
+			for(int i = 0;i < len;i++){
+				res += all.charAt( (int) (Math.random()*all.length()) );
+			}
+			return res;
+		};
+		...
+		onCreate(){
+			...
+			ip = "#";
+
+			StringTokenizer ipformatted = new StringTokenizer(getLocalIpAddress(),".");
+
+			ip+=ipformatted.nextToken()+"A"+ipformatted.nextToken()+"B"+ipformatted.nextToken()+"C"+ipformatted.nextToken()+"D";
+
+			ip+="#";
+
+			String text = random(64) + ip + random(64 - ip.length());
+			...
+		}
+		...
+	```
+
+	But do not forget to modify the AndroidManifest.xml for permissions:
+
+	```xml
+		<uses-permission android:name="android.permission.INTERNET" />
+    	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	```
