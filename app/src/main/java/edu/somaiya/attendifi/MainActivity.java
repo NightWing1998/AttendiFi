@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
@@ -18,6 +20,8 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+
+import org.w3c.dom.Text;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -33,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     Barcode thisCode;
     String ip;
     BarcodeDetector detector;
+
+    int index = 0;
     String all = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMONPQRSTUVWXYZ0123456789`~!@$%^&*(){}[]:';\",./<>?";
     public String random(int len){
         String res = "";
@@ -57,11 +63,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception ex) {
             Log.i("IP Address", ex.toString());
         }
-        return null;
+        return "NO.INTERNET.AVAILABLE.RightNOW";
     };
 
     public void genBarcode(String text,ImageView img) throws WriterException{
-        String rndm = random(64) + text + random(64 - text.length());
+        String rndm = random(64) + text + random(63 - text.length()) + index;
 
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 
@@ -79,8 +85,11 @@ public class MainActivity extends AppCompatActivity {
 
         txtView = (TextView) findViewById(R.id.txtContent);
 
-        ( (TextView) findViewById(R.id.ip) ).setText(getLocalIpAddress());
-
+        try {
+            ((TextView) findViewById(R.id.ip)).setText(getLocalIpAddress());
+        } catch (Exception e){
+            Toast.makeText(this, "No Internet Available", Toast.LENGTH_SHORT).show();
+        }
         ip = "#";
 
         StringTokenizer ipformatted = new StringTokenizer(getLocalIpAddress(),".");
@@ -115,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 barcodes = detector.detect(frame);
                 thisCode = barcodes.valueAt(0);
                 txtView.setText(thisCode.rawValue);
+                index++;
 
                 // Generate new barcode
                 try {
