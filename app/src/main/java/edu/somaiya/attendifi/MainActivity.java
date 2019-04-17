@@ -1,5 +1,6 @@
 package edu.somaiya.attendifi;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.firebase.internal.InternalTokenProvider;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception ex) {
             Log.i("IP Address", ex.toString());
         }
-        return "NO.INTERNET.AVAILABLE.RightNOW";
+        return "NO.INTERNET.RIGHT.NOW";
     };
 
     public void genBarcode(String text,ImageView img) throws WriterException{
@@ -76,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
         Bitmap myBitmap = barcodeEncoder.createBitmap(bitMatrix);
         img.setImageBitmap( myBitmap );
 
+    }
+
+    public void openCam(View v){
+        Intent i = new Intent(this.getApplicationContext(),camera.class);
+        startActivity(i);
     }
 
     @Override
