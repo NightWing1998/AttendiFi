@@ -3,6 +3,7 @@ package edu.somaiya.attendifi;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.Camera;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,13 +57,14 @@ public class camera extends AppCompatActivity {
                 .build();
 
         cameraSource = new CameraSource.Builder(this, barcodeDetector)
-                .setRequestedPreviewSize(1920, 1080)
+                .setRequestedPreviewSize(192*3, 108*3)
                 .setAutoFocusEnabled(true) //you should add this feature
                 .build();
 
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
+
                 try {
                     if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                         cameraSource.start(surfaceView.getHolder());
@@ -89,7 +94,7 @@ public class camera extends AppCompatActivity {
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
-                Toast.makeText(getApplicationContext(), "To prevent memory leaks barcode scanner has been stopped", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "To prevent memory leaks barcode scanner has been stopped", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -103,17 +108,31 @@ public class camera extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                            if (barcodes.valueAt(0).email != null) {
-                                txtBarcodeValue.removeCallbacks(null);
-                                intentData = barcodes.valueAt(0).email.address;
-                                txtBarcodeValue.setText(intentData);
-                                btnAction.setText("ADD CONTENT TO THE MAIL");
-                            } else {
                                 btnAction.setText("LAUNCH URL");
                                 intentData = barcodes.valueAt(0).displayValue;
                                 txtBarcodeValue.setText(intentData);
 
-                            }
+                                cameraSource.release();
+
+                                surfaceView.animate().alpha(0);
+
+                                ImageView img = new ImageView(getApplicationContext());
+                                img.setImageResource(R.drawable.check_mark_2);
+                                img.animate().alpha(0);
+                                img.animate().scaleX(0);
+                                img.animate().scaleX(0);
+                                LinearLayout l = (LinearLayout) findViewById(R.id.linear);
+                                l.addView(img,0);
+                                l.removeViewAt(1);
+
+                                img.animate().scaleY(1f).scaleX(1f).rotation(360).setDuration(2000);
+                                img.animate().alpha(.25f).setDuration(500);
+                                img.animate().alpha(.5f).setDuration(500);
+                                img.animate().alpha(.75f).setDuration(500);
+                                img.animate().alpha(1f).setDuration(500);
+
+                                cameraSource = null;
+
                         }
                     });
 
@@ -126,7 +145,8 @@ public class camera extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        cameraSource.release();
+        if(cameraSource != null)
+            cameraSource.release();
     }
 
     @Override
