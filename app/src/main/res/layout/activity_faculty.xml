@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkPrimaryEx"
-    tools:context=".MainActivity">
+    tools:context=".faculty">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,24 +21,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0">
-
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20sp"
-                android:layout_marginTop="10sp"
-                android:layout_marginEnd="20sp"
-                android:layout_marginBottom="10sp"
-                android:background="@color/darkPrimary"
-                android:elevation="24dp"
-                android:fadingEdge="horizontal|vertical"
-                android:gravity="center"
-                android:shadowColor="#a100aa"
-                android:text="@string/buttonProcess"
-                android:textColor="@color/darkAccent"
-                android:translationZ="100sp" />
 
 
             <ImageView
@@ -75,40 +57,6 @@
                 android:layout_marginEnd="20sp"
                 android:layout_marginBottom="10sp"
                 />
-
-            <Button
-                android:id="@+id/camOpen"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20sp"
-                android:layout_marginTop="10sp"
-                android:layout_marginEnd="20sp"
-                android:layout_marginBottom="10sp"
-                android:background="@color/darkPrimary"
-                android:elevation="24dp"
-                android:fadingEdge="horizontal|vertical"
-                android:gravity="center"
-                android:onClick="openCam"
-                android:text="Open Camera"
-                android:textColor="@color/darkAccent"
-                android:translationZ="100sp" />
-
-            <Button
-                android:id="@+id/server_start"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20sp"
-                android:layout_marginTop="10sp"
-                android:layout_marginEnd="20sp"
-                android:layout_marginBottom="10sp"
-                android:background="@color/darkPrimary"
-                android:elevation="24dp"
-                android:fadingEdge="horizontal|vertical"
-                android:gravity="center"
-                android:onClick="serve"
-                android:text="Start Server"
-                android:textColor="@color/darkAccent"
-                android:translationZ="100sp" />
 
         </LinearLayout>
     </ScrollView>

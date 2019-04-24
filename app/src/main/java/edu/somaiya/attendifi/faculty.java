@@ -1,29 +1,18 @@
 package edu.somaiya.attendifi;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
-import android.util.SparseArray;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
-import com.google.firebase.internal.InternalTokenProvider;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
-import org.w3c.dom.Text;
 
 import java.io.DataInputStream;
 import java.net.Inet4Address;
@@ -37,11 +26,7 @@ import java.util.StringTokenizer;
 public class faculty extends AppCompatActivity {
 
     TextView txtView;
-    Frame frame;
-    SparseArray<Barcode> barcodes;
-    Barcode thisCode;
     String ip;
-    BarcodeDetector detector;
 
     int index = 0;
     String all = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMONPQRSTUVWXYZ0123456789`~!@$%^&*(){}[]:';\",./<>?";
@@ -53,8 +38,8 @@ public class faculty extends AppCompatActivity {
         return res;
     };
 
-    public void serve(View v){
-        Toast.makeText(this, "Serve pressed", Toast.LENGTH_SHORT).show();
+    public void serve(){
+        Toast.makeText(this, "Server started", Toast.LENGTH_SHORT).show();
         ServerSocket ss = null;
         Socket s = null;
         try{
@@ -115,29 +100,6 @@ public class faculty extends AppCompatActivity {
 
     }
 
-    public String decodeIp(String S) throws Exception{
-        int end = Integer.parseInt( String.valueOf(S.charAt(S.length()-1)) );
-        StringTokenizer decoded = new StringTokenizer(S,"#");
-        String temp = decoded.nextToken(),result="";
-        temp = decoded.nextToken();
-        for(int i = 0;i < temp.length();i++){
-            char t = temp.charAt(i);
-            if( t == 'A' || t == 'B' || t == 'C' ){
-                result+='.';
-            } else if (t == 'D') {
-                break;
-            } else {
-                result+=S.charAt(i);
-            }
-        }
-        return result+String.valueOf(end);
-    }
-
-    public void openCam(View v){
-        Intent i = new Intent(this.getApplicationContext(),camera.class);
-        startActivity(i);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,32 +129,6 @@ public class faculty extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Button btn = (Button) findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                detector =
-                        new BarcodeDetector.Builder(getApplicationContext())
-                                .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE)
-                                .build();
-                if(!detector.isOperational()){
-                    txtView.setText(R.string.scanner_fail);
-                    return;
-                }
-                Bitmap myBitmap = ((BitmapDrawable)myImageView.getDrawable()).getBitmap();
-                frame = new Frame.Builder().setBitmap(myBitmap).build();
-                barcodes = detector.detect(frame);
-                thisCode = barcodes.valueAt(0);
-                txtView.setText(thisCode.rawValue);
-                index++;
-
-                // Generate new barcode
-                try {
-                    genBarcode(ip, myImageView);
-                } catch (WriterException e){
-                    e.printStackTrace();
-                }
-            }
-        });
+        serve();
     }
 }

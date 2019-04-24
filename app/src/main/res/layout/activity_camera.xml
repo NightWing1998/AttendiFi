@@ -41,7 +41,7 @@
             android:elevation="24dp"
             android:fadingEdge="horizontal|vertical"
             android:gravity="center"
-            android:text="@string/trial"
+            android:text="Re scan"
             android:textColor="@color/darkAccent"
             android:translationZ="100sp" />
 
