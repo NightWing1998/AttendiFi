@@ -29,7 +29,7 @@ import java.util.StringTokenizer;
 // TODO : http://androidsrc.net/android-client-server-using-sockets-client-implementation/
 // TODO : https://developer.android.com/reference/java/net/Socket ---> socket programming
 
-public class camera extends AppCompatActivity {
+public class student extends AppCompatActivity {
 
     public JSONObject decodeIp(String S) throws Exception{
         StringTokenizer decoded = new StringTokenizer(S,"#");
@@ -53,7 +53,7 @@ public class camera extends AppCompatActivity {
     }
 
     SurfaceView surfaceView;
-//    boolean checked = false;
+    //    boolean checked = false;
     char index;
     TextView txtBarcodeValue;
     private BarcodeDetector barcodeDetector;
@@ -65,7 +65,7 @@ public class camera extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
+        setContentView(R.layout.activity_student);
 
         txtBarcodeValue = findViewById(R.id.txtBarcodeValue);
         surfaceView = findViewById(R.id.surfaceView);
@@ -98,7 +98,7 @@ public class camera extends AppCompatActivity {
                     if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                         cameraSource.start(surfaceView.getHolder());
                     } else {
-                        ActivityCompat.requestPermissions(camera.this, new
+                        ActivityCompat.requestPermissions(student.this, new
                                 String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
                     }
 
@@ -137,25 +137,25 @@ public class camera extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                                btnAction.setText("LAUNCH URL");
-                                String scanned = barcodes.valueAt(0).displayValue;
-                                try{
-                                    intentData = decodeIp(scanned);
-                                    index = (char)intentData.get("index");
-                                    scanned = (String)intentData.get("ip");
-                                } catch (Exception e){
-                                    scanned+=e.toString();
-                                }
-                                txtBarcodeValue.setText(intentData.toString());
+                            btnAction.setText("LAUNCH URL");
+                            String scanned = barcodes.valueAt(0).displayValue;
+                            try{
+                                intentData = decodeIp(scanned);
+                                index = (char)intentData.get("index");
+                                scanned = (String)intentData.get("ip");
+                            } catch (Exception e){
+                                scanned+=e.toString();
+                            }
+                            txtBarcodeValue.setText(intentData.toString());
 
-                                cameraSource.release();
+                            cameraSource.release();
 
-                                ImageView img = new ImageView(getApplicationContext());
-                                img.setImageResource(R.drawable.check_mark_2);
-                                img.animate().alpha(0).setDuration(0);
-                                LinearLayout l = (LinearLayout) findViewById(R.id.linear);
-                                l.addView(img,0);
-                                l.removeViewAt(1);
+                            ImageView img = new ImageView(getApplicationContext());
+                            img.setImageResource(R.drawable.check_mark_2);
+                            img.animate().alpha(0).setDuration(0);
+                            LinearLayout l = (LinearLayout) findViewById(R.id.linear);
+                            l.addView(img,0);
+                            l.removeViewAt(1);
 
                             img.animate().rotation(720).setDuration(1000);
                             img.animate().alpha(.25f).setDuration(500);
@@ -167,31 +167,31 @@ public class camera extends AppCompatActivity {
 
                             cameraSource = null;
 
-                                // Add sockets logic here
-                                Socket connect = null;
-                                try{
-                                    connect = new Socket((String)intentData.get("ip"),6666);
+                            // Add sockets logic here
+                            Socket connect = null;
+                            try{
+                                connect = new Socket((String)intentData.get("ip"),6666);
 
-                                    DataOutputStream dout=new DataOutputStream(connect.getOutputStream());
+                                DataOutputStream dout=new DataOutputStream(connect.getOutputStream());
 
-                                    dout.flush();
-                                    dout.writeUTF(intentData.toString());
+                                dout.flush();
+                                dout.writeUTF(intentData.toString());
 
-                                    Toast.makeText(camera.this, intentData.toString(), Toast.LENGTH_SHORT).show();
-                                    dout.close();
-                                } catch ( Exception e){
-                                    Toast.makeText(camera.this, "Socket unknown host error", Toast.LENGTH_SHORT).show();
-                                    Log.i("Socket Error",e.toString());
-                                } finally {
-                                    if(connect != null){
-                                        try{
-                                            connect.close();
+                                Toast.makeText(student.this, intentData.toString(), Toast.LENGTH_SHORT).show();
+                                dout.close();
+                            } catch ( Exception e){
+                                Toast.makeText(student.this, "Socket unknown host error", Toast.LENGTH_SHORT).show();
+                                Log.i("Socket Error",e.toString());
+                            } finally {
+                                if(connect != null){
+                                    try{
+                                        connect.close();
 //                                            Toast.makeText(camera.this, "Socket closed", Toast.LENGTH_SHORT).show();
-                                        } catch (IOException e){
-                                            e.printStackTrace();
-                                        }
+                                    } catch (IOException e){
+                                        e.printStackTrace();
                                     }
                                 }
+                            }
 
                         }
                     });

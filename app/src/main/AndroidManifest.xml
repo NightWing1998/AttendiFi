@@ -10,11 +10,11 @@
         android:required="true" />
 
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
 
     <application
         android:allowBackup="true"
@@ -24,12 +24,16 @@
         android:roundIcon="@mipmap/trial_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".student"></activity>
+        <activity android:name=".student_form" />
+        <activity android:name=".faculty_form" />
+        <activity android:name=".faculty" />
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name=".camera"></activity>
+        <activity android:name=".camera" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
