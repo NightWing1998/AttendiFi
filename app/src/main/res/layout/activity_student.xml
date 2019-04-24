@@ -19,8 +19,8 @@
 
         <SurfaceView
             android:id="@+id/surfaceView"
-            android:layout_width="400dp"
-            android:layout_height="400dp" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/txtBarcodeValue"

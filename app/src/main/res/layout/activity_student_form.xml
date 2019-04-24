@@ -44,7 +44,7 @@
                 android:layout_marginBottom="10sp"
                 android:fontFamily="monospace"
                 android:hint="Enter your roll number"
-                android:inputType="text"
+                android:inputType="number"
                 android:textColor="@color/darkAccent"
                 android:textColorHint="@color/darkAccent" />
 

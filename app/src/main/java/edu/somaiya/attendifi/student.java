@@ -59,7 +59,6 @@ public class student extends AppCompatActivity {
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
-    Button btnAction;
     JSONObject intentData;
 
     @Override
@@ -67,10 +66,10 @@ public class student extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
 
+        Toast.makeText(this, "Scan faculty's barcode to mark yourself attended", Toast.LENGTH_SHORT).show();
+
         txtBarcodeValue = findViewById(R.id.txtBarcodeValue);
         surfaceView = findViewById(R.id.surfaceView);
-        btnAction = findViewById(R.id.btnAction);
-
 
     }
 
@@ -79,14 +78,14 @@ public class student extends AppCompatActivity {
 //        if(checked)
 //            return;
 
-        Toast.makeText(getApplicationContext(), "Barcode scanner started", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "Barcode scanner started", Toast.LENGTH_SHORT).show();
 
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.ALL_FORMATS)
                 .build();
 
         cameraSource = new CameraSource.Builder(this, barcodeDetector)
-                .setRequestedPreviewSize(192*3, 108*3)
+                .setRequestedPreviewSize(1920, 1080)
                 .setAutoFocusEnabled(true) //you should add this feature
                 .build();
 
@@ -137,7 +136,6 @@ public class student extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                            btnAction.setText("LAUNCH URL");
                             String scanned = barcodes.valueAt(0).displayValue;
                             try{
                                 intentData = decodeIp(scanned);
