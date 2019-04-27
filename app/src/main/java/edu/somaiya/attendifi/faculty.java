@@ -1,11 +1,11 @@
 package edu.somaiya.attendifi;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.graphics.Bitmap;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,8 +17,6 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -31,6 +29,7 @@ public class faculty extends AppCompatActivity {
 
     TextView txtView;
     String ip;
+    facultySocket fs = null;
 
     int index = 0;
     String all = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMONPQRSTUVWXYZ0123456789`~!@$%^&*(){}[]:';\",./<>?";
@@ -43,9 +42,9 @@ public class faculty extends AppCompatActivity {
     };
 
     public void serve(){
-        Toast.makeText(this, "Server started", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Server started", Toast.LENGTH_SHORT).show();
         try {
-            new facultySocket(this.getApplicationContext(),new OnEventListener<String>() {
+            fs = new facultySocket(new OnEventListener<String>() {
                 @Override
                 public void onSuccess(String result) {
                     Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
@@ -55,9 +54,12 @@ public class faculty extends AppCompatActivity {
                 public void onFailure(Exception e) {
                     Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                 }
-            }).execute();
+            });
+//            fs = new facultySocket();
+            fs.execute();
         } catch (Exception e){
-            e.printStackTrace();
+//            e.printStackTrace();
+            Log.i("server error",e.toString());
         }
     }
 
@@ -89,6 +91,13 @@ public class faculty extends AppCompatActivity {
         Bitmap myBitmap = barcodeEncoder.createBitmap(bitMatrix);
         img.setImageBitmap( myBitmap );
 
+    }
+
+    public void close(View v){
+        if(fs != null){
+            fs.close();
+            fs = null;
+        }
     }
 
     @Override
@@ -125,59 +134,74 @@ public class faculty extends AppCompatActivity {
 }
 
 interface OnEventListener<T> {
-    public void onSuccess(T object);
-    public void onFailure(Exception e);
+    void onSuccess(T object);
+    void onFailure(Exception e);
 }
 
 class facultySocket extends AsyncTask<String,Integer,Integer> {
     ServerSocket ss = null;
     Socket s = null;
     private OnEventListener<String> callback;
-    private Context context;
-    facultySocket(Context context,OnEventListener callback){
-        this.context = context;
+    DataInputStream dis;
+    private boolean close = true;
+//    TODO: USE GET APPLICATION CONTEXT FOR TOAST
+    facultySocket(OnEventListener callback){
         this.callback = callback;
     }
+    void close(){
+        try {
+            close = false;
+            if( s != null){
+                s.close();
+            }
+            if (ss != null) {
+                ss.close();
+            }
+            if( dis != null ){
+                dis.close();
+            }
+//            callback.onSuccess("Close successfully");
+            Log.i("Closed socket","Socket close successful");
+        } catch (Exception e) {
+//            result = -2;
+            Log.i("Closing error", e.toString());
+//            e.printStackTrace();
+        }
+    }
+
     @Override
     protected Integer doInBackground(String... ip){
         Integer result = 0;
 
         try{
+            Log.i("Start Socket","Server started successfully");
+            callback.onSuccess("Taking attendance");
             ss=new ServerSocket(6666);
             s=ss.accept();//establishes connection
 
-            DataInputStream dis=new DataInputStream(s.getInputStream());
-
-            String	str=(String)dis.readUTF();
+            dis = new DataInputStream(s.getInputStream());
+            String str = "";
+            while (close){
+                str=(String)dis.readUTF();
+                Log.i("Received",str);
+                callback.onSuccess(str);
+            }
 
 //            Toast.makeText(this, str, Toast.LENGTH_LONG).show();
-            Log.i("Received",str);
-            dis.close();
+//            dis.close();
 
             result = 0;
-            callback.onSuccess(str);
+            return result;
 
         } catch (Exception e){
             result = -1;
             Log.i("Socket error",e.toString());
             callback.onFailure(e);
 //            e.printStackTrace();
-        }finally {
-            try {
-                if( s != null){
-                    s.close();
-                }
-                if (ss != null) {
-                    ss.close();
-                }
-            } catch (Exception e){
-                result = -2;
-                Log.i("Closing error",e.toString());
-//                e.printStackTrace();
-            }
+            return result;
         }
 
-        return result;
+//        return result;
     }
 
     protected void onProgressUpdate(Integer... progress) {

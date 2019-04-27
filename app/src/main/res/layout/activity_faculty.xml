@@ -58,6 +58,19 @@
                 android:layout_marginBottom="10sp"
                 />
 
+            <Button
+                android:id="@+id/close"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20sp"
+                android:layout_marginEnd="20sp"
+                android:background="@color/colorPrimary"
+                android:elevation="300sp"
+                android:onClick="close"
+                android:shadowColor="@color/colorPrimary"
+                android:text="CLOSE ATTENDANCE"
+                android:textColor="@color/colorAccent" />
+
         </LinearLayout>
     </ScrollView>
 

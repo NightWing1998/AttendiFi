@@ -28,7 +28,7 @@
                 android:textColorHint="@color/colorAccent"
                 app:hintTextAppearance="@style/TextLabel">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -52,7 +52,7 @@
                 android:textColorHint="@color/colorAccent"
                 app:hintTextAppearance="@style/TextLabel"
                 >
-            <EditText
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/department"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -77,7 +77,7 @@
                 android:textColorHint="@color/colorAccent"
                 app:hintTextAppearance="@style/TextLabel"
                 >
-            <EditText
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/division"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -101,7 +101,7 @@
                 android:textColorHint="@color/colorAccent"
                 app:hintTextAppearance="@style/TextLabel"
                 >
-            <EditText
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/subject"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -125,7 +125,7 @@
                 android:textColorHint="@color/colorAccent"
                 app:hintTextAppearance="@style/TextLabel"
                 >
-            <EditText
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/topic"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -149,7 +149,7 @@
                 android:textColorHint="@color/colorAccent"
                 app:hintTextAppearance="@style/TextLabel"
                 >
-            <EditText
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/timing"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
