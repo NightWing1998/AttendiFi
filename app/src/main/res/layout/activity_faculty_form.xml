@@ -19,22 +19,41 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
-            <EditText
-                android:id="@+id/edit1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="20sp"
-                android:layout_marginTop="10sp"
-                android:layout_marginEnd="20sp"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="monospace"
-                android:hint="Enter your Name"
-                android:inputType="text"
-                android:textColor="@color/darkAccent"
-                android:textColorHint="@color/colorAccent" />
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="20sp"
+                android:paddingBottom="20sp"
+                android:textColorHint="@color/colorAccent"
+                app:hintTextAppearance="@style/TextLabel">
+
+                <EditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20sp"
+                    android:layout_marginTop="10sp"
+                    android:layout_marginEnd="20sp"
+                    android:layout_marginBottom="10sp"
+                    android:fontFamily="monospace"
+                    android:hint="Name"
+                    android:inputType="text"
+                    android:textColor="@color/darkAccent"
+                    android:textColorHint="@color/colorAccent" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="20sp"
+                android:paddingBottom="20sp"
+                android:textColorHint="@color/colorAccent"
+                app:hintTextAppearance="@style/TextLabel"
+                >
             <EditText
-                android:id="@+id/edit2"
+                android:id="@+id/department"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20sp"
@@ -42,14 +61,24 @@
                 android:layout_marginEnd="20sp"
                 android:layout_marginBottom="10sp"
                 android:fontFamily="monospace"
-                android:hint="Enter the class"
+                android:hint="Department"
                 android:inputType="text"
                 android:textColor="@color/darkAccent"
                 android:textColorHint="@color/darkAccent"
                 android:textColorLink="@color/darkAccent" />
+            </android.support.design.widget.TextInputLayout>
 
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="20sp"
+                android:paddingBottom="20sp"
+                android:textColorHint="@color/colorAccent"
+                app:hintTextAppearance="@style/TextLabel"
+                >
             <EditText
-                android:id="@+id/edit3"
+                android:id="@+id/division"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20sp"
@@ -57,14 +86,23 @@
                 android:layout_marginEnd="20sp"
                 android:layout_marginBottom="10sp"
                 android:fontFamily="monospace"
-                android:hint="Enter the division"
+                android:hint="Division"
                 android:inputType="text"
                 android:textColor="@color/darkAccent"
                 android:textColorHint="@color/darkAccent"
                 />
+            </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="20sp"
+                android:paddingBottom="20sp"
+                android:textColorHint="@color/colorAccent"
+                app:hintTextAppearance="@style/TextLabel"
+                >
             <EditText
-                android:id="@+id/edit4"
+                android:id="@+id/subject"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20sp"
@@ -72,14 +110,23 @@
                 android:layout_marginEnd="20sp"
                 android:layout_marginBottom="10sp"
                 android:fontFamily="monospace"
-                android:hint="Enter the subject"
+                android:hint="Subject"
                 android:inputType="text"
                 android:textColor="@color/darkAccent"
                 android:textColorHint="@color/darkAccent"
                 />
+            </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="20sp"
+                android:paddingBottom="20sp"
+                android:textColorHint="@color/colorAccent"
+                app:hintTextAppearance="@style/TextLabel"
+                >
             <EditText
-                android:id="@+id/edit5"
+                android:id="@+id/topic"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20sp"
@@ -87,14 +134,23 @@
                 android:layout_marginEnd="20sp"
                 android:layout_marginBottom="10sp"
                 android:fontFamily="monospace"
-                android:hint="Enter the topic "
+                android:hint="Topic"
                 android:inputType="text"
                 android:textColor="@color/darkAccent"
                 android:textColorHint="@color/darkAccent"
                 />
+            </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="20sp"
+                android:paddingBottom="20sp"
+                android:textColorHint="@color/colorAccent"
+                app:hintTextAppearance="@style/TextLabel"
+                >
             <EditText
-                android:id="@+id/edit6"
+                android:id="@+id/timing"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20sp"
@@ -102,14 +158,15 @@
                 android:layout_marginEnd="20sp"
                 android:layout_marginBottom="10sp"
                 android:fontFamily="monospace"
-                android:hint="Enter the timing"
+                android:hint="Timing"
                 android:inputType="text"
                 android:textColor="@color/darkAccent"
                 android:textColorHint="@color/darkAccent"
                 />
+            </android.support.design.widget.TextInputLayout>
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/create_class"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20sp"
@@ -117,7 +174,12 @@
                 android:layout_marginEnd="20sp"
                 android:layout_marginBottom="10sp"
                 android:background="@color/colorPrimary"
+                android:elevation="300sp"
                 android:onClick="faculty"
+                android:shadowColor="@color/colorPrimary"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="100"
                 android:text="Create Class"
                 android:textColor="@color/colorAccent" />
 

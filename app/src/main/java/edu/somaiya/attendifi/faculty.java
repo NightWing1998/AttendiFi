@@ -1,5 +1,7 @@
 package edu.somaiya.attendifi;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.graphics.Bitmap;
@@ -15,6 +17,8 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -40,33 +44,20 @@ public class faculty extends AppCompatActivity {
 
     public void serve(){
         Toast.makeText(this, "Server started", Toast.LENGTH_SHORT).show();
-        ServerSocket ss = null;
-        Socket s = null;
-        try{
-            ss=new ServerSocket(6666);
-            s=ss.accept();//establishes connection
+        try {
+            new facultySocket(this.getApplicationContext(),new OnEventListener<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                }
 
-            DataInputStream dis=new DataInputStream(s.getInputStream());
-
-            String	str=(String)dis.readUTF();
-
-            Toast.makeText(this, str, Toast.LENGTH_LONG).show();
-
-            dis.close();
-
+                @Override
+                public void onFailure(Exception e) {
+                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                }
+            }).execute();
         } catch (Exception e){
             e.printStackTrace();
-        }finally {
-            try {
-                if( s != null){
-                    s.close();
-                }
-                if (ss != null) {
-                    ss.close();
-                }
-            } catch (Exception e){
-                e.printStackTrace();
-            }
         }
     }
 
@@ -130,5 +121,79 @@ public class faculty extends AppCompatActivity {
         }
 
         serve();
+    }
+}
+
+interface OnEventListener<T> {
+    public void onSuccess(T object);
+    public void onFailure(Exception e);
+}
+
+class facultySocket extends AsyncTask<String,Integer,Integer> {
+    ServerSocket ss = null;
+    Socket s = null;
+    private OnEventListener<String> callback;
+    private Context context;
+    facultySocket(Context context,OnEventListener callback){
+        this.context = context;
+        this.callback = callback;
+    }
+    @Override
+    protected Integer doInBackground(String... ip){
+        Integer result = 0;
+
+        try{
+            ss=new ServerSocket(6666);
+            s=ss.accept();//establishes connection
+
+            DataInputStream dis=new DataInputStream(s.getInputStream());
+
+            String	str=(String)dis.readUTF();
+
+//            Toast.makeText(this, str, Toast.LENGTH_LONG).show();
+            Log.i("Received",str);
+            dis.close();
+
+            result = 0;
+            callback.onSuccess(str);
+
+        } catch (Exception e){
+            result = -1;
+            Log.i("Socket error",e.toString());
+            callback.onFailure(e);
+//            e.printStackTrace();
+        }finally {
+            try {
+                if( s != null){
+                    s.close();
+                }
+                if (ss != null) {
+                    ss.close();
+                }
+            } catch (Exception e){
+                result = -2;
+                Log.i("Closing error",e.toString());
+//                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
+    protected void onProgressUpdate(Integer... progress) {
+
+    }
+
+    protected void onPostExecute(Integer result) {
+        switch (result){
+            case 0:
+                Log.i("Success","Receiving successfull!!!");break;
+
+            case -1:
+                Log.i("Socket Error","Error");break;
+
+            case -2:
+                Log.i("Close error","Cannot close connection");break;
+        }
     }
 }

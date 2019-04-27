@@ -20,36 +20,58 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <EditText
-                android:id="@+id/edit1"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="20sp"
-                android:layout_marginTop="10sp"
-                android:layout_marginEnd="20sp"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="monospace"
-                android:hint="Enter your Name"
-                android:inputType="text"
-                android:textColor="@color/darkAccent"
-                android:textColorHint="@color/colorAccent" />
+                android:textColorHint="@color/colorAccent"
+                app:hintTextAppearance="@style/TextLabel">
 
-            <EditText
-                android:id="@+id/edit2"
+                <EditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20sp"
+                    android:layout_marginTop="10sp"
+                    android:layout_marginEnd="20sp"
+                    android:layout_marginBottom="10sp"
+                    android:fontFamily="monospace"
+                    android:hint="Name"
+                    android:imeActionLabel="ab"
+                    android:inputType="text"
+                    android:paddingTop="20sp"
+                    android:paddingBottom="20sp"
+                    android:textColor="@color/darkAccent"
+                    android:textColorHint="@color/colorAccent" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="20sp"
-                android:layout_marginTop="10sp"
-                android:layout_marginEnd="20sp"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="monospace"
-                android:hint="Enter your roll number"
-                android:inputType="number"
-                android:textColor="@color/darkAccent"
-                android:textColorHint="@color/darkAccent" />
+                android:textColorHint="@color/colorAccent"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true"
+                app:hintTextAppearance="@style/TextLabel">
+
+                <EditText
+                    android:id="@+id/roll_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20sp"
+                    android:layout_marginTop="10sp"
+                    android:layout_marginEnd="20sp"
+                    android:layout_marginBottom="10sp"
+                    android:fontFamily="monospace"
+                    android:hint="Roll Number"
+                    android:inputType="number"
+                    android:paddingTop="20sp"
+                    android:paddingBottom="20sp"
+                    android:textColor="@color/darkAccent"
+                    android:textColorHint="@color/darkAccent" />
+            </android.support.design.widget.TextInputLayout>
+
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/attend"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20sp"
@@ -57,7 +79,12 @@
                 android:layout_marginEnd="20sp"
                 android:layout_marginBottom="10sp"
                 android:background="@color/colorPrimary"
+                android:elevation="300sp"
                 android:onClick="student"
+                android:shadowColor="@color/colorPrimary"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="10"
                 android:text="Attend"
                 android:textColor="@color/colorAccent" />
 

@@ -9,7 +9,11 @@
         <item name="colorPrimary">@color/darkPrimary</item>
         <item name="colorPrimaryDark">@color/darkPrimaryEx</item>
         <item name="colorAccent">@color/darkAccent</item>
-        <item name="android:textSize">18dp</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextLabel" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">18sp</item>
     </style>
 
 </resources>

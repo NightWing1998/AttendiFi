@@ -1,7 +1,9 @@
 package edu.somaiya.attendifi;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -146,7 +148,8 @@ public class student extends AppCompatActivity {
                             }
                             txtBarcodeValue.setText(intentData.toString());
 
-                            cameraSource.release();
+                            if(cameraSource != null)
+                                cameraSource.release();
 
                             ImageView img = new ImageView(getApplicationContext());
                             img.setImageResource(R.drawable.check_mark_2);
@@ -161,36 +164,40 @@ public class student extends AppCompatActivity {
                             img.animate().alpha(0.75f).setDuration(500);
                             img.animate().alpha(1f).setDuration(500);
 
-//                                checked = true;
+//                            checked = true;
 
                             cameraSource = null;
 
                             // Add sockets logic here
-                            Socket connect = null;
-                            try{
-                                connect = new Socket((String)intentData.get("ip"),6666);
-
-                                DataOutputStream dout=new DataOutputStream(connect.getOutputStream());
-
-                                dout.flush();
-                                dout.writeUTF(intentData.toString());
-
-                                Toast.makeText(student.this, intentData.toString(), Toast.LENGTH_SHORT).show();
-                                dout.close();
-                            } catch ( Exception e){
-                                Toast.makeText(student.this, "Socket unknown host error", Toast.LENGTH_SHORT).show();
-                                Log.i("Socket Error",e.toString());
-                            } finally {
-                                if(connect != null){
-                                    try{
-                                        connect.close();
-//                                            Toast.makeText(camera.this, "Socket closed", Toast.LENGTH_SHORT).show();
-                                    } catch (IOException e){
-                                        e.printStackTrace();
-                                    }
-                                }
+//                            Socket connect = null;
+//                            try{
+//                                connect = new Socket((String)intentData.get("ip"),6666);
+//
+//                                DataOutputStream dout=new DataOutputStream(connect.getOutputStream());
+//
+//                                dout.flush();
+//                                dout.writeUTF(intentData.toString());
+//
+//                                Toast.makeText(student.this, intentData.toString(), Toast.LENGTH_SHORT).show();
+//                                dout.close();
+//                            } catch ( Exception e){
+//                                Toast.makeText(student.this, "Socket unknown host error", Toast.LENGTH_SHORT).show();
+//                                Log.i("Socket Error",e.toString());
+//                            } finally {
+//                                if(connect != null){
+//                                    try{
+//                                        connect.close();
+////                                            Toast.makeText(camera.this, "Socket closed", Toast.LENGTH_SHORT).show();
+//                                    } catch (IOException e){
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+//                            }
+                            try {
+                                new studentSocket().execute(intentData);
+                            } catch (Exception e){
+                                e.printStackTrace();
                             }
-
                         }
                     });
 
@@ -211,5 +218,76 @@ public class student extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         initialiseDetectorsAndSources();
+    }
+}
+
+class studentSocket extends AsyncTask<JSONObject,Integer,JSONObject>{
+    Socket connect;
+
+    @Override
+    protected JSONObject doInBackground(JSONObject... ip){
+        JSONObject result = new JSONObject();
+
+        try{
+            connect = new Socket((String)ip[0].get("ip"),6666);
+
+            DataOutputStream dout=new DataOutputStream(connect.getOutputStream());
+
+            dout.flush();
+            dout.writeUTF(ip[0].toString());
+
+            result.put("output",0);
+            dout.close();
+        } catch ( Exception e){
+            try {
+                result.put("output", -1);
+            }catch (Exception ejson){
+                ejson.printStackTrace();
+            }
+            Log.i("Socket Error",e.toString());
+        } finally {
+            if(connect != null){
+                try{
+                    connect.close();
+//                                            Toast.makeText(camera.this, "Socket closed", Toast.LENGTH_SHORT).show();
+                } catch (IOException e){
+                    try {
+                        result.put("output", -2);
+                    }catch (Exception ejson){
+                        ejson.printStackTrace();
+                    }
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return result;
+    }
+
+    protected void onProgressUpdate(Integer... progress) {
+
+    }
+
+    protected void onPostExecute(JSONObject result) {
+        int res = -2;
+        try {
+            res = result.getInt("output");
+        }catch (Exception ejson){
+            ejson.printStackTrace();
+        }
+        switch (res){
+            case 0:
+                Log.i("Success","Sending successful!!!");
+                break;
+
+            case -1:
+                Log.i("Socket Error","Error");
+                break;
+
+            case -2:
+                Log.i("Close error","Cannot close connection");
+                break;
+        }
+
     }
 }
