@@ -24,9 +24,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColorHint="@color/colorAccent"
+                android:saveEnabled="true"
                 app:hintTextAppearance="@style/TextLabel">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -38,6 +39,7 @@
                     android:hint="Name"
                     android:imeActionLabel="ab"
                     android:inputType="text"
+                    android:saveEnabled="true"
                     android:paddingTop="20sp"
                     android:paddingBottom="20sp"
                     android:textColor="@color/darkAccent"
@@ -50,9 +52,10 @@
                 android:textColorHint="@color/colorAccent"
                 app:hintAnimationEnabled="true"
                 app:hintEnabled="true"
+                android:saveEnabled="true"
                 app:hintTextAppearance="@style/TextLabel">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/roll_number"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -62,6 +65,7 @@
                     android:layout_marginBottom="10sp"
                     android:fontFamily="monospace"
                     android:hint="Roll Number"
+                    android:saveEnabled="true"
                     android:inputType="number"
                     android:paddingTop="20sp"
                     android:paddingBottom="20sp"

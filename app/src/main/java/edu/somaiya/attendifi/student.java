@@ -3,6 +3,8 @@ package edu.somaiya.attendifi;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +13,6 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,35 +22,34 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+
 import org.json.*;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-// TODO : http://androidsrc.net/android-client-server-using-sockets-client-implementation/
-// TODO : https://developer.android.com/reference/java/net/Socket ---> socket programming
-
 public class student extends AppCompatActivity {
 
-    public JSONObject decodeIp(String S) throws Exception{
-        StringTokenizer decoded = new StringTokenizer(S,"#");
-        String temp = decoded.nextToken(),result="";
+    public JSONObject decodeIp(String S) throws Exception {
+        StringTokenizer decoded = new StringTokenizer(S, "#");
+        String temp = decoded.nextToken(), result = "";
         temp = decoded.nextToken();
         JSONObject obj = new JSONObject();
-        for(int i = 0;i < temp.length();i++){
+        for (int i = 0; i < temp.length(); i++) {
             char t = temp.charAt(i);
-            if( t == 'A' || t == 'B' || t == 'C' ){
-                result+='.';
+            if (t == 'A' || t == 'B' || t == 'C') {
+                result += '.';
             } else if (t == 'D') {
                 i = temp.length() + 2;
             } else {
-                result+=t;
+                result += t;
             }
         }
-        obj.put("ip",result);
-        obj.put("index",Integer.parseInt(String.valueOf(S.charAt(S.length()-1))) );
+        obj.put("ip", result);
+        obj.put("index", Integer.parseInt(String.valueOf(S.charAt(S.length() - 1))));
         return obj;
 //        return end;
     }
@@ -61,14 +61,46 @@ public class student extends AppCompatActivity {
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
-    JSONObject intentData;
+    static JSONObject intentData = new JSONObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
 
         Toast.makeText(this, "Scan faculty's barcode to mark yourself attended", Toast.LENGTH_SHORT).show();
+        txtBarcodeValue = findViewById(R.id.txtBarcodeValue);
+        Bundle i = getIntent().getExtras();
+        try{
+            String str = i.getString("Name");
+
+            intentData.put("name", str);
+            intentData.put("roll_no", i.getString("Roll_No"));
+
+            WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
+            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                Log.i("permission","true");
+            } else {
+                ActivityCompat.requestPermissions(student.this, new
+                        String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 2);
+                ActivityCompat.requestPermissions(student.this, new
+                        String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
+            }
+            if (!wifiManager.isWifiEnabled()) {
+                wifiManager.setWifiEnabled(true);
+            }
+            WifiInfo wInfo = wifiManager.getConnectionInfo();
+            String macAddress = wInfo.getMacAddress();
+            intentData.put("mac_address", macAddress);
+
+
+            txtBarcodeValue.setText(intentData.toString());
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         txtBarcodeValue = findViewById(R.id.txtBarcodeValue);
         surfaceView = findViewById(R.id.surfaceView);
@@ -128,7 +160,7 @@ public class student extends AppCompatActivity {
             }
 
             @Override
-            public void receiveDetections(Detector.Detections<Barcode> detections){
+            public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() != 0) {
 
@@ -138,24 +170,28 @@ public class student extends AppCompatActivity {
                         @Override
                         public void run() {
 
+                            JSONObject intentData1;
                             String scanned = barcodes.valueAt(0).displayValue;
-                            try{
-                                intentData = decodeIp(scanned);
-                                index = (char)intentData.get("index");
-                                scanned = (String)intentData.get("ip");
-                            } catch (Exception e){
-                                scanned+=e.toString();
+                            try {
+                                intentData1 = decodeIp(scanned);
+//                                index = (char) ;
+//                                scanned = (String) intentData1.get("ip");
+                                intentData.put("index",intentData1.getInt("index"));
+                                intentData.put("ip",intentData1.getString("ip"));
+                                Log.i("Intent Data",intentData.toString());
+                            } catch (Exception e) {
+                                scanned += e.toString();
                             }
-                            txtBarcodeValue.setText(intentData.toString());
+                            txtBarcodeValue.setText("YOUR REQUEST FOR ATTENDANCE HAS BEEN PLACED!");
 
-                            if(cameraSource != null)
+                            if (cameraSource != null)
                                 cameraSource.release();
 
                             ImageView img = new ImageView(getApplicationContext());
                             img.setImageResource(R.drawable.check_mark_2);
                             img.animate().alpha(0).setDuration(0);
                             LinearLayout l = (LinearLayout) findViewById(R.id.linear);
-                            l.addView(img,0);
+                            l.addView(img, 0);
                             l.removeViewAt(1);
 
                             img.animate().rotation(720).setDuration(1000);
@@ -168,34 +204,10 @@ public class student extends AppCompatActivity {
 
                             cameraSource = null;
 
-                            // Add sockets logic here
-//                            Socket connect = null;
-//                            try{
-//                                connect = new Socket((String)intentData.get("ip"),6666);
-//
-//                                DataOutputStream dout=new DataOutputStream(connect.getOutputStream());
-//
-//                                dout.flush();
-//                                dout.writeUTF(intentData.toString());
-//
-//                                Toast.makeText(student.this, intentData.toString(), Toast.LENGTH_SHORT).show();
-//                                dout.close();
-//                            } catch ( Exception e){
-//                                Toast.makeText(student.this, "Socket unknown host error", Toast.LENGTH_SHORT).show();
-//                                Log.i("Socket Error",e.toString());
-//                            } finally {
-//                                if(connect != null){
-//                                    try{
-//                                        connect.close();
-////                                            Toast.makeText(camera.this, "Socket closed", Toast.LENGTH_SHORT).show();
-//                                    } catch (IOException e){
-//                                        e.printStackTrace();
-//                                    }
-//                                }
-//                            }
                             try {
-                                new studentSocket().execute(intentData);
-                            } catch (Exception e){
+                                new studentSocket(getApplicationContext(),txtBarcodeValue).execute(intentData);
+                                txtBarcodeValue.setText(intentData.toString());
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
@@ -210,7 +222,7 @@ public class student extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(cameraSource != null)
+        if (cameraSource != null)
             cameraSource.release();
     }
 
@@ -221,42 +233,60 @@ public class student extends AppCompatActivity {
     }
 }
 
-class studentSocket extends AsyncTask<JSONObject,Integer,JSONObject>{
-    Socket connect;
+class studentSocket extends AsyncTask<JSONObject, Integer, JSONObject> {
+    private Socket connect;
+    private TextView txt;
+    private Context c;
+    studentSocket(Context c,TextView txtView ){
+        this.txt = txtView;
+        this.c = c;
+    }
 
     @Override
-    protected JSONObject doInBackground(JSONObject... ip){
+    protected JSONObject doInBackground(JSONObject... ip) {
         JSONObject result = new JSONObject();
 
-        try{
-            connect = new Socket((String)ip[0].get("ip"),6666);
+        try {
+            connect = new Socket((String) ip[0].get("ip"), 6666);
 
-            DataOutputStream dout=new DataOutputStream(connect.getOutputStream());
+            DataOutputStream dout = new DataOutputStream(connect.getOutputStream());
 
             dout.flush();
             dout.writeUTF(ip[0].toString());
 
-            result.put("output",0);
             dout.close();
-        } catch ( Exception e){
+
+            DataInputStream din = new DataInputStream(connect.getInputStream());
+
+            result.put("output", din.readInt());
+
+            din.close();
+
+        } catch (Exception e) {
             try {
-                result.put("output", -1);
-            }catch (Exception ejson){
+                result.getInt("output");
+            } catch (Exception ejson) {
+                try {
+                    result.put("output", -1);
+                }catch (Exception e1){}
                 ejson.printStackTrace();
             }
-            Log.i("Socket Error",e.toString());
+            Log.i("Socket Error", e.toString());
         } finally {
-            if(connect != null){
-                try{
+            if (connect != null) {
+                try {
+                    Thread.sleep(1000);
                     connect.close();
 //                                            Toast.makeText(camera.this, "Socket closed", Toast.LENGTH_SHORT).show();
-                } catch (IOException e){
+                } catch (IOException e) {
                     try {
                         result.put("output", -2);
-                    }catch (Exception ejson){
+                    } catch (Exception ejson) {
                         ejson.printStackTrace();
                     }
                     e.printStackTrace();
+                } catch (InterruptedException ie){
+                    ie.printStackTrace();
                 }
             }
         }
@@ -272,20 +302,22 @@ class studentSocket extends AsyncTask<JSONObject,Integer,JSONObject>{
         int res = -2;
         try {
             res = result.getInt("output");
-        }catch (Exception ejson){
+        } catch (Exception ejson) {
             ejson.printStackTrace();
         }
-        switch (res){
+        switch (res) {
             case 0:
-                Log.i("Success","Sending successful!!!");
+                Log.i("Success", "Sending successful!!!");
+                Toast.makeText(c.getApplicationContext(), "Attended successfully!!", Toast.LENGTH_SHORT).show();
+                txt.setText("You have attended!!");
                 break;
 
             case -1:
-                Log.i("Socket Error","Error");
+                Log.i("Socket Error1", "Error");
                 break;
 
             case -2:
-                Log.i("Close error","Cannot close connection");
+                Log.i("Close error1", "Cannot close connection");
                 break;
         }
 

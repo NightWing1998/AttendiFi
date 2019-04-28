@@ -68,6 +68,9 @@
                 android:elevation="300sp"
                 android:onClick="close"
                 android:shadowColor="@color/colorPrimary"
+                android:shadowDx="10"
+                android:shadowDy="10"
+                android:shadowRadius="200"
                 android:text="CLOSE ATTENDANCE"
                 android:textColor="@color/colorAccent" />
 

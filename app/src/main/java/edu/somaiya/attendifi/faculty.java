@@ -1,5 +1,6 @@
 package edu.somaiya.attendifi;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,45 +17,45 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 public class faculty extends AppCompatActivity {
 
     TextView txtView;
-    String ip;
+    static String ip;
     facultySocket fs = null;
 
-    int index = 0;
-    String all = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMONPQRSTUVWXYZ0123456789`~!@$%^&*(){}[]:';\",./<>?";
-    public String random(int len){
+    JSONObject initialInfo = new JSONObject();
+
+    static int index = 0;
+    static String all = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMONPQRSTUVWXYZ0123456789`~!@$%^&*(){}[]:';\",./<>?";
+    public static String random(int len){
         String res = "";
         for(int i = 0;i < len;i++){
             res += all.charAt( (int) (Math.random()*all.length()) );
         }
         return res;
-    };
+    }
 
     public void serve(){
 //        Toast.makeText(this, "Server started", Toast.LENGTH_SHORT).show();
+        ImageView myImageView = (ImageView) findViewById(R.id.imgview);
         try {
-            fs = new facultySocket(new OnEventListener<String>() {
-                @Override
-                public void onSuccess(String result) {
-                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-                }
-            });
+            fs = new facultySocket(this.getApplicationContext(),ip,myImageView,txtView,initialInfo);
 //            fs = new facultySocket();
             fs.execute();
         } catch (Exception e){
@@ -81,7 +82,7 @@ public class faculty extends AppCompatActivity {
         return "NO.INTERNET.RIGHT.NOW";
     };
 
-    public void genBarcode(String text,ImageView img) throws WriterException{
+    public static void genBarcode(String text,ImageView img) throws WriterException{
         String rndm = random(64) + text + random(63 - text.length()) + index;
 
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
@@ -90,7 +91,6 @@ public class faculty extends AppCompatActivity {
         BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
         Bitmap myBitmap = barcodeEncoder.createBitmap(bitMatrix);
         img.setImageBitmap( myBitmap );
-
     }
 
     public void close(View v){
@@ -105,6 +105,18 @@ public class faculty extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faculty);
 
+        Bundle i = getIntent().getExtras();
+        try {
+            initialInfo.put("name", i.getString("Name"));
+            initialInfo.put("department", i.getString("Department"));
+            initialInfo.put("year", i.getString("Year"));
+            initialInfo.put("division", i.getString("Division"));
+            initialInfo.put("subject", i.getString("Subject"));
+            initialInfo.put("topic", i.getString("Topic"));
+            initialInfo.put("timing", i.getString("Timing"));
+        } catch(JSONException je){
+            Log.i("JSON Exception",je.toString());
+        }
         txtView = (TextView) findViewById(R.id.txtContent);
 
         try {
@@ -133,20 +145,25 @@ public class faculty extends AppCompatActivity {
     }
 }
 
-interface OnEventListener<T> {
-    void onSuccess(T object);
-    void onFailure(Exception e);
-}
-
-class facultySocket extends AsyncTask<String,Integer,Integer> {
-    ServerSocket ss = null;
-    Socket s = null;
-    private OnEventListener<String> callback;
+class facultySocket extends AsyncTask<String,String,Integer> {
+    private ServerSocket ss = null;
+    private Socket s = null;
+    private Context c;
     DataInputStream dis;
+    DataOutputStream dout;
+    private String ip = "";
+    private ImageView img;
     private boolean close = true;
-//    TODO: USE GET APPLICATION CONTEXT FOR TOAST
-    facultySocket(OnEventListener callback){
-        this.callback = callback;
+    private TextView txt;
+    private JSONObject facultyInfo;
+    private Map<String,JSONObject> studentsInfo = new HashMap<String, JSONObject>();
+    private Vector<JSONObject> proxy = new Vector<JSONObject>();
+    facultySocket(Context context,String ip,ImageView img,TextView txtView,JSONObject info){
+        this.c = context;
+        this.ip = ip;
+        this.img = img;
+        this.facultyInfo = info;
+        this.txt = txtView;
     }
     void close(){
         try {
@@ -160,6 +177,8 @@ class facultySocket extends AsyncTask<String,Integer,Integer> {
             if( dis != null ){
                 dis.close();
             }
+            if( dout != null )
+                dout.close();
 //            callback.onSuccess("Close successfully");
             Log.i("Closed socket","Socket close successful");
         } catch (Exception e) {
@@ -168,6 +187,10 @@ class facultySocket extends AsyncTask<String,Integer,Integer> {
 //            e.printStackTrace();
         }
     }
+    @Override
+    protected void onPreExecute(){
+        Toast.makeText(c.getApplicationContext(), "Server started successfully", Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     protected Integer doInBackground(String... ip){
@@ -175,20 +198,31 @@ class facultySocket extends AsyncTask<String,Integer,Integer> {
 
         try{
             Log.i("Start Socket","Server started successfully");
-            callback.onSuccess("Taking attendance");
             ss=new ServerSocket(6666);
-            s=ss.accept();//establishes connection
-
-            dis = new DataInputStream(s.getInputStream());
             String str = "";
             while (close){
-                str=(String)dis.readUTF();
-                Log.i("Received",str);
-                callback.onSuccess(str);
-            }
+                s=ss.accept();//establishes connection
 
-//            Toast.makeText(this, str, Toast.LENGTH_LONG).show();
-//            dis.close();
+                dis = new DataInputStream(s.getInputStream());
+
+                str=(String)dis.readUTF();
+                publishProgress(str);
+                Log.i("Received",str);
+
+                dout = new DataOutputStream(s.getOutputStream());
+
+                dout.flush();
+                dout.writeInt(0);
+
+                Thread.sleep(1000);
+
+                dout.close();
+
+                dout = null;
+                dis = null;
+
+                s.close();
+            }
 
             result = 0;
             return result;
@@ -196,7 +230,6 @@ class facultySocket extends AsyncTask<String,Integer,Integer> {
         } catch (Exception e){
             result = -1;
             Log.i("Socket error",e.toString());
-            callback.onFailure(e);
 //            e.printStackTrace();
             return result;
         }
@@ -204,14 +237,52 @@ class facultySocket extends AsyncTask<String,Integer,Integer> {
 //        return result;
     }
 
-    protected void onProgressUpdate(Integer... progress) {
+    @Override
+    protected void onProgressUpdate(String... progress) {
 
+        JSONObject student;
+
+        try {
+            student = new JSONObject(progress[0]);
+
+            Toast.makeText(c.getApplicationContext(), "Last Student : " + student.getString("name"), Toast.LENGTH_SHORT).show();
+
+            String str = "Last Student: "+student.getString("name") + " Roll No: " + student.getString("roll_no");
+            txt.setText(str);
+
+            int index = student.getInt("index");
+            if(index == studentsInfo.size()){
+                String macAddress = student.getString("mac_address");
+
+                if( !studentsInfo.containsKey(macAddress) ){
+                    studentsInfo.put(macAddress,student);
+                } else {
+                    proxy.add(student);
+                    Toast.makeText(c.getApplicationContext(), "Proxy detected : " + student.getString("name"), Toast.LENGTH_SHORT).show();
+                }
+            } else if(index < studentsInfo.size()){
+                proxy.add(student);
+            }
+
+            faculty.genBarcode(this.ip,this.img);
+
+
+        } catch (WriterException we){
+            Log.i("Barcode error",we.toString());
+        } catch (JSONException je){
+            Log.i("JSON onprogress",je.toString());
+        }
     }
 
     protected void onPostExecute(Integer result) {
+        Toast.makeText(c.getApplicationContext(), "Server closed finally in post execute", Toast.LENGTH_SHORT).show();
+
+        Vector<JSONObject> attendance;
+        attendance = (Vector<JSONObject>)studentsInfo.values();
+//        TODO : Write to file here attendance vector and facultyInfo json object
         switch (result){
             case 0:
-                Log.i("Success","Receiving successfull!!!");break;
+                Log.i("Success","Receiving successful!!!");break;
 
             case -1:
                 Log.i("Socket Error","Error");break;
