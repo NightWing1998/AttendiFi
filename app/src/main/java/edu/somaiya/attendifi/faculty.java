@@ -1,6 +1,8 @@
 package edu.somaiya.attendifi;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,6 +33,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -95,6 +99,9 @@ public class faculty extends AppCompatActivity {
         BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
         Bitmap myBitmap = barcodeEncoder.createBitmap(bitMatrix);
         img.setImageBitmap( myBitmap );
+
+        index++;
+
     }
 
     public void close(View v){
@@ -102,7 +109,6 @@ public class faculty extends AppCompatActivity {
             fs.close();
             fs = null;
         }
-
     }
 
     @Override
@@ -173,6 +179,7 @@ class facultySocket extends AsyncTask<String,String,Integer> {
         this.txt = txtView;
         this.path = p;
     }
+
     void close(){
         try {
             close = false;
@@ -264,7 +271,7 @@ class facultySocket extends AsyncTask<String,String,Integer> {
 
                 if( !studentsInfo.containsKey(macAddress) ){
                     studentsInfo.put(macAddress,student);
-                }else if( macAddress == "02:00:00:00:00" ){
+                }else if( macAddress == "02:00:00:00:00:00" ){
                     macAddress += String.valueOf(count);
                     studentsInfo.put(macAddress,student);
                 }else {
@@ -287,8 +294,7 @@ class facultySocket extends AsyncTask<String,String,Integer> {
     protected void onPostExecute(Integer result) {
         Toast.makeText(c.getApplicationContext(), "Server closed finally in post execute", Toast.LENGTH_SHORT).show();
 
-        Vector<JSONObject> attendance;
-        attendance = (Vector<JSONObject>)studentsInfo.values();
+        Vector<JSONObject> attendance = new Vector<JSONObject>(studentsInfo.values());
 //        TODO : Write to file here attendance vector and facultyInfo json object
 
         FileWriter fw = null;
@@ -301,6 +307,22 @@ class facultySocket extends AsyncTask<String,String,Integer> {
             bw = new BufferedWriter(fw);
 
             bw.write("K. J.,Somaiya,College Of Engineering");
+            bw.newLine();
+            bw.write(facultyInfo.getString("department")+","+facultyInfo.getString("year")+","+facultyInfo.getString("division"));
+            bw.newLine();
+            bw.write(facultyInfo.getString("subject")+","+facultyInfo.getString("topic")+",");
+            bw.newLine();
+            bw.write(new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + "," + facultyInfo.getString("timing"));
+            bw.newLine();
+
+            for(JSONObject temp:attendance){
+                try{
+                    bw.write( (temp.getInt("index")/2+1) + "," +temp.getString("roll_no")+ ","+temp.getString("name") );
+                    bw.newLine();
+                } catch (JSONException je){
+                    je.printStackTrace();
+                }
+            }
 
             if(bw != null){
                 bw.close();
@@ -310,6 +332,8 @@ class facultySocket extends AsyncTask<String,String,Integer> {
             }
         } catch (IOException ioe){
             ioe.printStackTrace();
+        } catch (JSONException je){
+            je.printStackTrace();
         }
         switch (result){
             case 0:
