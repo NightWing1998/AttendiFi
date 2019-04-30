@@ -9,4 +9,9 @@
     <color name="darkPrimary">#555</color>
     <color name="darkPrimaryEx">#333333</color>
     <color name="darkAccent">#aaaaaa</color>
+    <color name="electronPrimary">#2B2E3B</color>
+    <color name="electronPrimaryDark">#1A1D2A</color>
+    <color name="electronAccent">#74B1BE</color>
+    <color name="electronAccentDark">#20515B</color>
+    <color name="electronAccentDarkExtreme">#3A585F</color>
 </resources>

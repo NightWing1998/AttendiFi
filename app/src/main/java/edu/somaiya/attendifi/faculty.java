@@ -20,8 +20,12 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileWriter;
+import java.io.File;
+import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -55,7 +59,7 @@ public class faculty extends AppCompatActivity {
 //        Toast.makeText(this, "Server started", Toast.LENGTH_SHORT).show();
         ImageView myImageView = (ImageView) findViewById(R.id.imgview);
         try {
-            fs = new facultySocket(this.getApplicationContext(),ip,myImageView,txtView,initialInfo);
+            fs = new facultySocket(this.getApplicationContext(),ip,myImageView,txtView,initialInfo,getExternalFilesDir(null));
 //            fs = new facultySocket();
             fs.execute();
         } catch (Exception e){
@@ -98,6 +102,7 @@ public class faculty extends AppCompatActivity {
             fs.close();
             fs = null;
         }
+
     }
 
     @Override
@@ -155,15 +160,18 @@ class facultySocket extends AsyncTask<String,String,Integer> {
     private ImageView img;
     private boolean close = true;
     private TextView txt;
+    private static int count = 0;
     private JSONObject facultyInfo;
     private Map<String,JSONObject> studentsInfo = new HashMap<String, JSONObject>();
     private Vector<JSONObject> proxy = new Vector<JSONObject>();
-    facultySocket(Context context,String ip,ImageView img,TextView txtView,JSONObject info){
+    private File path;
+    facultySocket(Context context,String ip,ImageView img,TextView txtView,JSONObject info,File p){
         this.c = context;
         this.ip = ip;
         this.img = img;
         this.facultyInfo = info;
         this.txt = txtView;
+        this.path = p;
     }
     void close(){
         try {
@@ -256,7 +264,10 @@ class facultySocket extends AsyncTask<String,String,Integer> {
 
                 if( !studentsInfo.containsKey(macAddress) ){
                     studentsInfo.put(macAddress,student);
-                } else {
+                }else if( macAddress == "02:00:00:00:00" ){
+                    macAddress += String.valueOf(count);
+                    studentsInfo.put(macAddress,student);
+                }else {
                     proxy.add(student);
                     Toast.makeText(c.getApplicationContext(), "Proxy detected : " + student.getString("name"), Toast.LENGTH_SHORT).show();
                 }
@@ -265,7 +276,6 @@ class facultySocket extends AsyncTask<String,String,Integer> {
             }
 
             faculty.genBarcode(this.ip,this.img);
-
 
         } catch (WriterException we){
             Log.i("Barcode error",we.toString());
@@ -280,6 +290,27 @@ class facultySocket extends AsyncTask<String,String,Integer> {
         Vector<JSONObject> attendance;
         attendance = (Vector<JSONObject>)studentsInfo.values();
 //        TODO : Write to file here attendance vector and facultyInfo json object
+
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        try{
+            File t = new File(path.getPath(),"hello.csv");
+            if(!t.exists())
+                t.createNewFile();
+            fw = new FileWriter(t);
+            bw = new BufferedWriter(fw);
+
+            bw.write("K. J.,Somaiya,College Of Engineering");
+
+            if(bw != null){
+                bw.close();
+            }
+            if(fw != null){
+                fw.close();
+            }
+        } catch (IOException ioe){
+            ioe.printStackTrace();
+        }
         switch (result){
             case 0:
                 Log.i("Success","Receiving successful!!!");break;

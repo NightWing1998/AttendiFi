@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darkPrimaryEx"
+    android:background="@color/electronPrimaryDark"
     tools:context=".faculty">
 
     <ScrollView
@@ -30,33 +30,29 @@
                 android:layout_marginStart="20sp"
                 android:layout_marginTop="10sp"
                 android:layout_marginEnd="20sp"
-                android:layout_marginBottom="10sp"/>
+                android:layout_marginBottom="10sp" />
 
             <TextView
                 android:id="@+id/ip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="monospace"
-                android:textColor="@color/darkAccent"
-                tools:fontFamily="monospace"
                 android:layout_marginStart="20sp"
                 android:layout_marginTop="10sp"
                 android:layout_marginEnd="20sp"
                 android:layout_marginBottom="10sp"
-                />
+                android:fontFamily="monospace"
+                tools:fontFamily="monospace" />
 
             <TextView
                 android:id="@+id/txtContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="monospace"
-                android:text=""
-                android:textColor="@color/darkAccent"
                 android:layout_marginStart="20sp"
                 android:layout_marginTop="10sp"
                 android:layout_marginEnd="20sp"
                 android:layout_marginBottom="10sp"
-                />
+                android:fontFamily="monospace"
+                android:text="" />
 
             <Button
                 android:id="@+id/close"
@@ -64,15 +60,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20sp"
                 android:layout_marginEnd="20sp"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/button_custom"
+                android:backgroundTint="@color/electronAccent"
                 android:elevation="300sp"
                 android:onClick="close"
-                android:shadowColor="@color/colorPrimary"
-                android:shadowDx="10"
-                android:shadowDy="10"
-                android:shadowRadius="200"
+                android:shadowColor="@color/electronAccentDarkExtreme"
+                android:shadowDx="-5"
+                android:shadowDy="-5"
+                android:shadowRadius="20"
                 android:text="CLOSE ATTENDANCE"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/electronPrimary"
+                android:translationZ="500sp" />
 
         </LinearLayout>
     </ScrollView>

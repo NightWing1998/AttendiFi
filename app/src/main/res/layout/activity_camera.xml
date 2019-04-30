@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/electronPrimaryDark"
     tools:context=".camera">
 
     <LinearLayout
@@ -42,7 +42,6 @@
             android:fadingEdge="horizontal|vertical"
             android:gravity="center"
             android:text="Re scan"
-            android:textColor="@color/darkAccent"
             android:translationZ="100sp" />
 
     </LinearLayout>

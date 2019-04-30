@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/electronPrimaryDark"
     tools:context=".student_form">
 
     <ScrollView
@@ -18,13 +18,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColorHint="@color/colorAccent"
+                android:paddingTop="20sp"
+                android:paddingBottom="20sp"
                 android:saveEnabled="true"
+                android:textColorHint="@color/electronAccentDark"
                 app:hintTextAppearance="@style/TextLabel">
 
                 <android.support.design.widget.TextInputEditText
@@ -37,22 +39,19 @@
                     android:layout_marginBottom="10sp"
                     android:fontFamily="monospace"
                     android:hint="Name"
-                    android:imeActionLabel="ab"
                     android:inputType="text"
                     android:saveEnabled="true"
-                    android:paddingTop="20sp"
-                    android:paddingBottom="20sp"
-                    android:textColor="@color/darkAccent"
-                    android:textColorHint="@color/colorAccent" />
+                    android:textColor="@color/electronAccent"
+                    android:textColorHint="@color/electronAccentDark" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColorHint="@color/colorAccent"
+                android:saveEnabled="true"
+                android:textColorHint="@color/electronAccentDark"
                 app:hintAnimationEnabled="true"
                 app:hintEnabled="true"
-                android:saveEnabled="true"
                 app:hintTextAppearance="@style/TextLabel">
 
                 <android.support.design.widget.TextInputEditText
@@ -65,12 +64,12 @@
                     android:layout_marginBottom="10sp"
                     android:fontFamily="monospace"
                     android:hint="Roll Number"
-                    android:saveEnabled="true"
                     android:inputType="number"
                     android:paddingTop="20sp"
                     android:paddingBottom="20sp"
-                    android:textColor="@color/darkAccent"
-                    android:textColorHint="@color/darkAccent" />
+                    android:saveEnabled="true"
+                    android:textColor="@color/electronAccent"
+                    android:textColorHint="@color/electronAccentDark" />
             </android.support.design.widget.TextInputLayout>
 
 
@@ -82,15 +81,17 @@
                 android:layout_marginTop="10sp"
                 android:layout_marginEnd="20sp"
                 android:layout_marginBottom="10sp"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/button_custom"
+                android:backgroundTint="@color/electronAccent"
                 android:elevation="300sp"
                 android:onClick="student"
-                android:shadowColor="@color/colorPrimary"
-                android:shadowDx="2"
-                android:shadowDy="2"
+                android:shadowColor="@color/electronAccentDarkExtreme"
+                android:shadowDx="-3"
+                android:shadowDy="-3"
                 android:shadowRadius="10"
                 android:text="Attend"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/electronPrimary"
+                android:translationZ="500sp" />
 
         </LinearLayout>
     </ScrollView>

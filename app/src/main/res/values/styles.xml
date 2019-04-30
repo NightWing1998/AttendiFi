@@ -6,14 +6,31 @@
         <!--<item name="colorPrimary">@color/colorPrimary</item>-->
         <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
         <!--<item name="colorAccent">@color/colorAccent</item>-->
-        <item name="colorPrimary">@color/darkPrimary</item>
-        <item name="colorPrimaryDark">@color/darkPrimaryEx</item>
-        <item name="colorAccent">@color/darkAccent</item>
+        <!--<item name="colorPrimary">@color/darkPrimary</item>-->
+        <!--<item name="colorPrimaryDark">@color/darkPrimaryEx</item>-->
+        <!--<item name="colorAccent">@color/darkAccent</item>-->
         <item name="android:textSize">18sp</item>
+        <item name="colorAccent">@color/electronAccentDarkExtreme</item>
+        <item name="colorPrimary">@color/electronPrimary</item>
+        <item name="colorPrimaryDark">@color/electronPrimaryDark</item>
+        <item name="editTextColor">@color/electronAccent</item>
+        <item name="android:textAppearance">@color/electronAccent</item>
+        <item name="android:textColor">@color/electronAccent</item>
+        <item name="actionBarStyle">@style/AppTheme.ActionBar</item>
     </style>
 
     <style name="TextLabel" parent="TextAppearance.Design.Hint">
         <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="AppTheme.ActionBar" parent="Widget.AppCompat.Light.ActionBar">
+        <item name="titleTextStyle">@style/AppTheme.ActionBar.TitleText</item>
+        <item name="background">@color/electronPrimary</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/electronAccent</item>
     </style>
 
 </resources>
