@@ -107,8 +107,8 @@
 
 ### Complete App Demp
 	
-* Faculty Side: 
+* Faculty Side
 	<img src = "./app/src/main/res/drawable/faculty.gif">
 
-* Student Side: 
+* Student Side
 	<img src = "./app/src/main/res/drawable/student.gif">
