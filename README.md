@@ -106,7 +106,7 @@
 	```
 
 ### Complete App Demp
-	
+
 * Faculty Side
 	<img src = "./app/src/main/res/drawable/faculty.gif">
 
