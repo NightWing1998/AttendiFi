@@ -1,5 +1,7 @@
 # AttendiFi
 
+## It is an application that helps a faculty take attedance in the classroom. The only constraint is that faculty and students have to be on the same network. We are open to issues.
+
 ### Initial set up
 * Change the build.gradle(Module : app) file with the following code:
 	```java
@@ -102,3 +104,11 @@
 		<uses-permission android:name="android.permission.INTERNET" />
     	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	```
+
+### Complete App Demp
+	
+* Faculty Side: 
+	<img src = "./app/src/main/res/drawable/faculty.gif">
+
+* Student Side: 
+	<img src = "./app/src/main/res/drawable/student.gif">
