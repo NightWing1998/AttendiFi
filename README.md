@@ -1,8 +1,8 @@
 # AttendiFi
 
-## It is an application that helps a faculty take attedance in the classroom. The only constraint is that faculty and students have to be on the same network. We are open to issues.
+## It is an application that helps a faculty take attendance in the classroom. The only constraint is that faculty and students have to be on the same network. We are open to issues.
 
-### Initial set up
+### Initial set up ( QR Code Scanning and Generation )
 * Change the build.gradle(Module : app) file with the following code:
 	```java
 			...
@@ -49,6 +49,8 @@
 	
 * Initial scan and process:
 	<img src = "./app/src/main/res/drawable/image_scanning.gif">
+
+### IP Address and encoding
 
 * Get the IP Address of the device:
 	```java
