@@ -1,5 +1,5 @@
 import TcpSocket from 'react-native-tcp-socket';
-import React from "react";
+import React, {useState} from "react";
 import { View, Text } from 'react-native';
 
 const alphanumeric = "1234567890-=[]{}|;,./:?><~!@$%^&*()_+qwertyuiopasdfghjklzxcvbnm";
@@ -28,8 +28,10 @@ const Faculty = props => {
 	const startTime = navigation.getParam("startTime", null);
 	const endTime = navigation.getParam("endTime", null);
 
+	const [students,setStudents] = useState([]);
+
 	const genTextForBarcode = () => {
-		let s = "";
+		let s = students.length.toString();
 		let encodedIp = "";
 		let ipArray = ip.split(".");
 		let initChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -47,12 +49,12 @@ const Faculty = props => {
 		if (s.length < 64) {
 			let firstSalt = s.length / 2 - (s.length / 2) % 1;
 			let secondSalt = s.length - firstSalt;
-			s = genRandom(firstSalt) + s + "#" + genRandom(secondSalt);
+			s = genRandom(firstSalt) + "#" + s + "#" + genRandom(secondSalt);
 		}
 		return s;
 	}
 
-	const oneRandom = genTextForBarcode();
+	const [qr,setqr] = useState(genTextForBarcode());
 
 	return (
 		<View>
@@ -82,7 +84,7 @@ const Faculty = props => {
 				Time - {startTime !== null && endTime !== null ? `${startTime} to ${endTime}` : "Time error"}
 			</Text>
 			<Text>
-				Barcode Text - {oneRandom}
+				QRText - {qr}
 			</Text>
 		</View>
 	)

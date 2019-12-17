@@ -23,7 +23,7 @@ const StudentForm = props => {
 			<Text>Student Details form</Text>
 			<View>
 				<Text>Name</Text>
-				<TextInput {...name} />
+				<TextInput {...name} autoCompleteType="name" />
 			</View>
 			<View>
 				<Text>ID/Roll_NO</Text>

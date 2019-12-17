@@ -32,7 +32,7 @@ const FacultyForm = props => {
 			<Text>Fill in the details about you and the lecture</Text>
 			<View>
 				<Text>Name</Text>
-				<TextInput {...name} />
+				<TextInput {...name} autoCompleteType="name" />
 			</View>
 			<View>
 				<Text>Subject</Text>

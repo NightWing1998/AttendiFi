@@ -1,4 +1,4 @@
 {
 	"java.configuration.updateBuildConfiguration": "automatic",
-	"editor.formatOnSave": false
+	"editor.formatOnSave": true
 }
