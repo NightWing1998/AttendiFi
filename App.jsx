@@ -1,6 +1,7 @@
 import {
 	NetworkInfo
 } from 'react-native-network-info';
+import { getMacAddressSync, getUniqueId } from "react-native-device-info";
 import {
 	View,
 	Text,
@@ -25,6 +26,7 @@ const Home = props => {
 
 	const [ip, setIp] = useState(null);
 	const [bssid, setBssid] = useState(null);
+	const [mac, setMac] = useState(null);
 	const [ssid, setSsid] = useState(null);
 
 	const [error, setError] = useState(null);
@@ -98,7 +100,7 @@ const Home = props => {
 		}).catch((reason) => console.log(reason));
 
 		const setAll = () => {
-			NetworkInfo.getIPAddress().then(ipAddress => {
+			NetworkInfo.getIPV4Address().then(ipAddress => {
 				console.log("IP:", ipAddress);
 				setIp(ipAddress);
 			});
@@ -113,6 +115,12 @@ const Home = props => {
 				console.log("BSSID:", bssid);
 				setBssid(bssid);
 			});
+
+			if (Platform.OS === "ios") {
+				setMac(getUniqueId());
+			} else {
+				setMac(getMacAddressSync());
+			}
 		}
 
 	});
@@ -122,8 +130,8 @@ const Home = props => {
 			<Text>
 				{error !== null ? error : <></>}
 			</Text>
-			<Button title="Faculty" onPress={() => navigation.navigate("FacultyForm", { ip, bssid, ssid })} />
-			<Button title="Student" onPress={() => navigation.navigate("StudentForm", { ip, bssid, ssid })} />
+			<Button title="Faculty" onPress={() => navigation.navigate("FacultyForm", { ip, bssid, ssid, mac })} />
+			<Button title="Student" onPress={() => navigation.navigate("StudentForm", { ip, bssid, ssid, mac })} />
 		</View>
 	)
 };

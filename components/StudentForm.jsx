@@ -16,6 +16,7 @@ const StudentForm = props => {
 
 	const ip = navigation.getParam("ip", "0.0.0.0");
 	const bssid = navigation.getParam("bssid", "02:00:00:00:00:00");
+	const mac = navigation.getParam("mac", "02:00:00:00:00:00");
 	const ssid = navigation.getParam("ssid", "<unknown ssid>");
 
 	return (
@@ -29,7 +30,7 @@ const StudentForm = props => {
 				<Text>ID/Roll_NO</Text>
 				<TextInput {...id} />
 			</View>
-			<Button onPress={() => navigation.navigate("Student", { ip, bssid, ssid, name: name.value, id: id.value })} title="Mark attendance....." />
+			<Button onPress={() => navigation.navigate("Student", { ip, bssid, ssid, mac, name: name.value, id: id.value })} title="Mark attendance....." />
 			<Button onPress={resetAll} title="Reset" color="#aa0000" />
 		</ScrollView>
 	);

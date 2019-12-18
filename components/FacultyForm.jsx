@@ -25,6 +25,7 @@ const FacultyForm = props => {
 
 	const ip = navigation.getParam("ip", "0.0.0.0");
 	const bssid = navigation.getParam("bssid", "02:00:00:00:00:00");
+	const mac = navigation.getParam("mac", "02:00:00:00:00:00");
 	const ssid = navigation.getParam("ssid", "<unknown ssid>");
 
 	return (
@@ -54,7 +55,7 @@ const FacultyForm = props => {
 				<Text>Ending time</Text>
 				<TextInput {...endTime} />
 			</View>
-			<Button onPress={() => navigation.navigate("Faculty", { ip, bssid, ssid, name: name.value, subject: subject.value, date: date.value, startTime: startTime.value, endTime: endTime.value, topic: topic.value })} title="Start taking attendance....." />
+			<Button onPress={() => navigation.navigate("Faculty", { ip, bssid, ssid, mac, name: name.value, subject: subject.value, date: date.value, startTime: startTime.value, endTime: endTime.value, topic: topic.value })} title="Start taking attendance....." />
 			<Button onPress={resetAll} title="Reset" color="#aa0000" />
 		</ScrollView>
 	);
