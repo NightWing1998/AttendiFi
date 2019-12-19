@@ -43,7 +43,7 @@ const Faculty = props => {
 		let s = sLength.toString();
 		let encodedIp = "";
 		let ipArray = ip.split(".");
-		let initChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		let initChar = "ABCDGHIJKLMNOPQRSTUVWXYZ";
 		for (let i = 0; i < ipArray.length; i++) {
 			encodedIp += ipArray[i] + initChar[i];
 		}
@@ -51,7 +51,7 @@ const Faculty = props => {
 		let encodedBssid = "";
 		let bssidArray = bssid.split(":");
 		for (let i = 0; i < bssidArray.length; i++) {
-			encodedBssid += bssidArray[i] + initChar[i];
+			encodedBssid += bssidArray[i] + initChar[i + 5];
 		}
 		s += "#" + encodedBssid;
 		s += "#" + ssid;

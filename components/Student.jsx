@@ -15,7 +15,7 @@ const Student = props => {
 	const name = navigation.getParam("name", "Unknown name");
 	const id = navigation.getParam("id", "00000");
 
-	const initChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	const initChar = "ABCDGHIJKLMNOPQRSTUVWXYZ";
 
 	const [res, setRes] = useState(null);
 	const [read, setRead] = useState(false);
@@ -28,7 +28,7 @@ const Student = props => {
 		let decodedIp = "";
 		let encodedBssid = decodedData[3];
 		let decodedBssid = "";
-		let i = 0;
+		let i = 5;
 		while (encodedBssid !== undefined && encodedBssid !== "") {
 			let temp = encodedBssid.split(initChar[i]);
 			if (temp[0] === "") {
