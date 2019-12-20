@@ -48,7 +48,7 @@
 	<p>Please refer to the commit with the same message to view the changes</p>
 	
 * Initial scan and process:
-	<img src = "./app/src/main/res/drawable/image_scanning.gif" height="600px">
+	<img src = "./app/src/main/res/drawable/image_scanning.gif" height="500px">
 
 ### IP Address and encoding
 
@@ -110,7 +110,7 @@
 ### Complete App Demo
 
 * Faculty Side
-	<p><img src = "./app/src/main/res/drawable/faculty.gif" height="600px"></p>
+	<p><img src = "./app/src/main/res/drawable/faculty.gif" height="500px"></p>
 
 * Student Side
-	<p><img src = "./app/src/main/res/drawable/student.gif" height="600px"></p>
+	<p><img src = "./app/src/main/res/drawable/student.gif" height="500px"></p>
